@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>số Thái Độ</title>
+    <script th:src="@{/bundle.js}"></script>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+          crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+
+
+<div id="so_chu_dao_content" th:utext="${content}" style="height: 500px" data-tiny-editor>
+
+
+</div>
+<br>
+<button id="save" >Save</button>
+<button id="back" ><a href="/soThaiDoList">back</a></button>
+<button id="backToMangement" ><a href="/managements">Về trang quản lý</a></button>
+<script th:src="@{/bundle.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    let number = /*[[${number}]]*/ 'default';
+
+    /*]]>*/
+</script>
+<script>
+    function getParam(param){
+        return new URLSearchParams(window.location.search).get(param);
+    }
+    $(document).ready(function () {
+
+        //auto save every 10 seconds
+        setInterval(function () {
+            let data = {
+                number:getParam("id"),
+                content:$('#so_chu_dao_content').html()
+            }
+            $.ajax({
+                type:'post',
+                url :'/submit/postSoThaiDo',
+                dataType:'json',
+                contentType:'application/json',
+                data :JSON.stringify(data)
+            }).done(function () {
+                console.log("auto save done");
+            })
+        },10000);
+        $("#save").click(function () {
+            let data = {
+                number:getParam("id"),
+                content:$('#so_chu_dao_content').html()
+            }
+            $.ajax({
+                type:'post',
+                url :'/submit/postSoThaiDo',
+                dataType:'json',
+                contentType:'application/json',
+                data :JSON.stringify(data)
+            }).done(function () {
+                console.log("done");
+                alert("saved");
+            })
+        });
+
+    });
+
+</script>
+</body>
+</html>
